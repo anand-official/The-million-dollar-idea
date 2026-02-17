@@ -5,8 +5,8 @@ import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
-router.use(authenticate); // All routes require authentication
-router.use(apiLimiter); // Apply rate limiting
+router.use(apiLimiter); // Apply rate limiting first
+router.use(authenticate); // Then authentication
 
 router.post('/', createAnalytics);
 router.get('/', getAnalytics);

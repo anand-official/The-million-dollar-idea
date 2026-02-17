@@ -4,8 +4,8 @@ import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
-router.use(authenticate);
-router.use(apiLimiter);
+router.use(apiLimiter); // Apply rate limiting first
+router.use(authenticate); // Then authentication
 
 // Placeholder user routes
 router.get('/', (req, res) => {

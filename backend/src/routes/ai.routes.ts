@@ -5,8 +5,8 @@ import { aiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
-router.use(authenticate); // All routes require authentication
-router.use(aiLimiter); // Apply AI-specific rate limiting
+router.use(aiLimiter); // Apply AI-specific rate limiting first
+router.use(authenticate); // Then authentication
 
 router.post('/insights', generateInsights);
 router.post('/ask', askQuestion);
