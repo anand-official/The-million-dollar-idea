@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { createError } from './errorHandler';
+import { getJWTSecret } from '../config/jwt';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -18,7 +19,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
       throw createError('Authentication required', 401);
     }
     
-    const secret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+    const secret = getJWTSecret();
     const decoded = jwt.verify(token, secret) as any;
     
     req.user = {

@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express';
 import Analytics from '../models/Analytics';
+import User from '../models/User';
 import { createError } from '../middleware/errorHandler';
 import { AuthRequest } from '../middleware/auth';
 import { generateAIInsights } from '../services/ai.service';
@@ -10,7 +11,6 @@ export const createAnalytics = async (req: AuthRequest, res: Response, next: Nex
     const userId = req.user?.id;
     
     // Get user's organization
-    const User = require('../models/User').default;
     const user = await User.findById(userId);
     
     if (!user || !user.organization) {
@@ -44,7 +44,6 @@ export const createAnalytics = async (req: AuthRequest, res: Response, next: Nex
 export const getAnalytics = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
-    const User = require('../models/User').default;
     const user = await User.findById(userId);
     
     if (!user || !user.organization) {
@@ -89,7 +88,6 @@ export const deleteAnalytics = async (req: AuthRequest, res: Response, next: Nex
     const { id } = req.params;
     const userId = req.user?.id;
     
-    const User = require('../models/User').default;
     const user = await User.findById(userId);
     
     const analytics = await Analytics.findOneAndDelete({

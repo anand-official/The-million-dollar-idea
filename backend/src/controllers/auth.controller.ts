@@ -4,6 +4,7 @@ import User from '../models/User';
 import Organization from '../models/Organization';
 import { createError } from '../middleware/errorHandler';
 import { AuthRequest } from '../middleware/auth';
+import { getJWTSecret } from '../config/jwt';
 
 export const register = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
@@ -42,7 +43,7 @@ export const register = async (req: AuthRequest, res: Response, next: NextFuncti
     // Generate JWT token
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+      getJWTSecret(),
       { expiresIn: '7d' }
     );
     
@@ -85,7 +86,7 @@ export const login = async (req: AuthRequest, res: Response, next: NextFunction)
     // Generate JWT token
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+      getJWTSecret(),
       { expiresIn: '7d' }
     );
     

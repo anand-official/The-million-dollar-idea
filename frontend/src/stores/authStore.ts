@@ -24,7 +24,16 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => {
   // Load from localStorage on initialization
   const stored = localStorage.getItem('auth-storage');
-  const initial = stored ? JSON.parse(stored) : { token: null, user: null, isAuthenticated: false };
+  let initial = { token: null, user: null, isAuthenticated: false };
+  
+  if (stored) {
+    try {
+      initial = JSON.parse(stored);
+    } catch (error) {
+      console.error('Failed to parse stored auth data:', error);
+      localStorage.removeItem('auth-storage');
+    }
+  }
 
   return {
     ...initial,

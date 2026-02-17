@@ -22,8 +22,22 @@ echo ""
 # Check if .env file exists
 if [ ! -f .env ]; then
     echo "⚙️  Creating .env file..."
+    
+    # Check if Node.js is available for JWT secret generation
+    if command -v node &> /dev/null; then
+        JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+    else
+        # Fallback to openssl if Node.js is not available
+        if command -v openssl &> /dev/null; then
+            JWT_SECRET=$(openssl rand -hex 64)
+        else
+            echo "⚠️  Warning: Neither Node.js nor OpenSSL found. Using a random string."
+            JWT_SECRET="change-this-to-a-secure-random-string-$(date +%s)"
+        fi
+    fi
+    
     cat > .env << EOF
-JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+JWT_SECRET=$JWT_SECRET
 NODE_ENV=development
 EOF
     echo "✅ .env file created with secure JWT secret"
